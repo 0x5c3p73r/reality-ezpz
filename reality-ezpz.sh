@@ -1064,17 +1064,11 @@ function generate_engine_config {
     "final": "$([[ ${config[warp]} == ON ]] && echo "warp" || echo "internet")",
     "rules": [
       {
-        "geoip": [
-          $([[ ${config[warp]} == OFF ]] && echo '"cn", "ir",')
-          "private"
-        ],
+        "rule_set": "geoip-cn",
         "outbound": "block"
       },
       {
-        "geosite": [
-          $([[ ${config[safenet]} == ON ]] && echo '"category-porn",' || true)
-          "category-ads-all"
-        ],
+        "rule_set": "geosite-category-ads-all",
         "outbound": "block"
       },
       {
@@ -1114,6 +1108,22 @@ function generate_engine_config {
           "icecyber.org"
         ],
         "outbound": "block"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "geoip-cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
+        "download_detour": "proxy"
+      },
+      {
+        "tag": "geosite-category-ads-all",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
+        "download_detour": "proxy"
       }
     ]
   }
