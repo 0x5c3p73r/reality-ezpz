@@ -687,6 +687,7 @@ networks:
 services:
   engine:
     image: ${image[${config[core]}]}
+    restart: always
     $([[ ${config[security]} == 'reality' ]] && echo "ports:" || true)
     $([[ ${config[security]} == 'reality' && ${config[port]} -eq 443 ]] && echo '- 80:8080' || true)
     $([[ ${config[security]} == 'reality' ]] && echo "- ${config[port]}:8443" || true)
@@ -694,13 +695,13 @@ services:
     $([[ ${config[transport]} == 'tuic' || ${config[transport]} == 'hysteria2' ]] && echo "- ${config[port]}:8443/udp" || true)
     $([[ ${config[security]} != 'reality' ]] && echo "expose:" || true)
     $([[ ${config[security]} != 'reality' ]] && echo "- 8443" || true)
-    restart: always
     environment:
       TZ: Etc/UTC
     volumes:
     - ./${path[engine]#${config_path}/}:/etc/${config[core]}/config.json
     $([[ ${config[security]} != 'reality' ]] && { [[ ${config[transport]} == 'http' ]] || [[ ${config[transport]} == 'tcp' ]] || [[ ${config[transport]} == 'tuic' ]] || [[ ${config[transport]} == 'hysteria2' ]]; } && echo "- ./${path[server_crt]#${config_path}/}:/etc/${config[core]}/server.crt" || true)
     $([[ ${config[security]} != 'reality' ]] && { [[ ${config[transport]} == 'http' ]] || [[ ${config[transport]} == 'tcp' ]] || [[ ${config[transport]} == 'tuic' ]] || [[ ${config[transport]} == 'hysteria2' ]]; } && echo "- ./${path[server_key]#${config_path}/}:/etc/${config[core]}/server.key" || true)
+    $([[ ${config[transport]} == 'hysteria2' ]] && echo "command: -D /var/lib/sing-box -C /etc/${config[core]}/ run" || true)
     networks:
     - reality
 $(if [[ ${config[security]} != 'reality' ]]; then
