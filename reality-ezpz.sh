@@ -1117,14 +1117,14 @@ function generate_engine_config {
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geoip/rule-set/geoip-cn.srs",
-        "download_detour": "proxy"
+        "download_detour": "internet"
       },
       {
         "tag": "geosite-category-ads-all",
         "type": "remote",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/SagerNet/sing-geosite/rule-set/geosite-category-ads-all.srs",
-        "download_detour": "proxy"
+        "download_detour": "internet"
       }
     ]
   }
