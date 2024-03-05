@@ -701,6 +701,7 @@ services:
     - ./${path[engine]#${config_path}/}:/etc/${config[core]}/config.json
     $([[ ${config[security]} != 'reality' ]] && { [[ ${config[transport]} == 'http' ]] || [[ ${config[transport]} == 'tcp' ]] || [[ ${config[transport]} == 'tuic' ]] || [[ ${config[transport]} == 'hysteria2' ]]; } && echo "- ./${path[server_crt]#${config_path}/}:/etc/${config[core]}/server.crt" || true)
     $([[ ${config[security]} != 'reality' ]] && { [[ ${config[transport]} == 'http' ]] || [[ ${config[transport]} == 'tcp' ]] || [[ ${config[transport]} == 'tuic' ]] || [[ ${config[transport]} == 'hysteria2' ]]; } && echo "- ./${path[server_key]#${config_path}/}:/etc/${config[core]}/server.key" || true)
+    $([[ ${config[transport]} == 'hysteria2' ]] && echo "- ./geodata:/etc/${config[core]}/geodata" || true)
     $([[ ${config[transport]} == 'hysteria2' ]] && echo "command: -D /var/lib/sing-box -C /etc/${config[core]}/ run" || true)
     networks:
     - reality
@@ -1127,6 +1128,12 @@ function generate_engine_config {
         "download_detour": "internet"
       }
     ]
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "/etc/sing-box/geodata/cache.db"
+    }
   }
 }
 EOF
@@ -1335,6 +1342,10 @@ function generate_config {
     generate_tgbot_compose
     generate_tgbot_dockerfile
     download_tgbot_script
+  fi
+
+  if [[ ${config[core]} == "sing-box" ]]; then
+    mkdir -p "${config_path}/geodata"
   fi
 }
 
