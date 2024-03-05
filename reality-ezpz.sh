@@ -7,9 +7,9 @@
 # to you under the Apache License, Version 2.0 (the
 # "License"); you may not use this file except in compliance
 # with the License.  You may obtain a copy of the License at
-# 
+#
 #   http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing,
 # software distributed under the License is distributed on an
 # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -39,7 +39,7 @@ WIDTH=60
 CHOICE_HEIGHT=20
 
 image[xray]="teddysun/xray:1.8.4"
-image[sing-box]="gzxhwq/sing-box:v1.6.5"
+image[sing-box]="ghcr.io/sagernet/sing-box:v1.8.7"
 image[nginx]="nginx:1.24.0"
 image[certbot]="certbot/certbot:v2.6.0"
 image[haproxy]="haproxy:2.8.0"
@@ -105,7 +105,7 @@ function show_help {
   echo ""
   echo "Usage: reality-ezpz.sh [-t|--transport=tcp|http|grpc|ws|tuic|hysteria2] [-d|--domain=<domain>] [--server=<server>] [--regenerate] [--default]
   [-r|--restart] [--enable-safenet=true|false] [--port=<port>] [-c|--core=xray|sing-box]
-  [--enable-warp=true|false] [--warp-license=<license>] [--security=reality|letsencrypt|selfsigned] [-m|--menu] [--show-server-config] 
+  [--enable-warp=true|false] [--warp-license=<license>] [--security=reality|letsencrypt|selfsigned] [-m|--menu] [--show-server-config]
   [--add-user=<username>] [--lists-users] [--show-user=<username>] [--delete-user=<username>] [--backup] [--restore=<url|file>] [-u|--uninstall]"
   echo ""
   echo "  -t, --transport <tcp|http|grpc|ws|tuic|hysteria2> Transport protocol (tcp, http, grpc, ws, tuic, hysteria2, default: ${defaults[transport]})"
@@ -120,7 +120,7 @@ function show_help {
   echo "      --enable-warp <true|false> Enable or disable Cloudflare warp"
   echo "      --warp-license <warp-license> Add Cloudflare warp+ license"
   echo "  -c  --core <sing-box|xray> Select core (xray, sing-box, default: ${defaults[core]})"
-  echo "      --security <reality|letsencrypt|selfsigned> Select type of TLS encryption (reality, letsencrypt, selfsigned, default: ${defaults[security]})" 
+  echo "      --security <reality|letsencrypt|selfsigned> Select type of TLS encryption (reality, letsencrypt, selfsigned, default: ${defaults[security]})"
   echo "  -m  --menu                Show menu"
   echo "      --enable-tgbot <true|false> Enable Telegram bot for user management"
   echo "      --tgbot-token <token> Token of Telegram bot"
@@ -277,7 +277,7 @@ function parse_args {
         if [[ ! ${args[tgbot_token]} =~ ${regex[tgbot_token]} ]]; then
           echo "Invalid Telegram Bot Token: ${args[tgbot_token]}"
           return 1
-        fi 
+        fi
         if ! curl -sSfL -m 3 "https://api.telegram.org/bot${args[tgbot_token]}/getMe" >/dev/null 2>&1; then
           echo "Invalid Telegram Bot Token: Telegram Bot Token is incorrect. Check it again."
           return 1
@@ -586,7 +586,7 @@ function build_config {
       config[warp_license]=""
       warp_delete_account "${config[warp_id]}" "${config[warp_token]}"
       echo "WARP has been disabled due to the license error."
-    fi 
+    fi
   fi
 }
 
@@ -1036,7 +1036,7 @@ function generate_engine_config {
       fi
       if [[ ${config[transport]} == grpc ]]; then
       echo ',"transport": {"type": "grpc","service_name": "'"${config[service_path]}"'"}'
-      fi 
+      fi
       if [[ ${config[transport]} == ws ]]; then
       echo ',"transport": {"type": "ws", "headers": {"Host": "'"${config[server]}"'"}, "path": "/'"${config[service_path]}"'"}'
       fi
@@ -2078,7 +2078,7 @@ function config_tgbot_menu {
       if [[ ! $tgbot_token =~ ${regex[tgbot_token]} ]]; then
         message_box "Invalid Input" "Invalid Telegram Bot Token"
         continue
-      fi 
+      fi
       if ! curl -sSfL -m 3 "https://api.telegram.org/bot${tgbot_token}/getMe" >/dev/null 2>&1; then
         message_box "Invalid Input" "Telegram Bot Token is incorrect. Check it again."
         continue
